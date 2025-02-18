@@ -3,8 +3,8 @@ FROM node:16-alpine AS frontend-build
 WORKDIR /usr/src/app/frontend
 COPY frontend/package*.json ./
 RUN npm install
-COPY frontend/ ./
 RUN npm run build
+COPY frontend/ ./
 
 # Stage 2: Build the backend
 FROM node:16-alpine AS backend-build
