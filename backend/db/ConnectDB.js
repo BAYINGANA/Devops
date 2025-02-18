@@ -18,7 +18,7 @@ const ConnectDB = async () => {
       max: parseInt(process.env.DB_CONNECTIONLIMIT) || 10,
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 2000,
-      ssl: { // Enable SSL with relaxed verification
+      ssl: {
         rejectUnauthorized: false
       }
     });
