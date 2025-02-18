@@ -20,7 +20,7 @@ const ConnectDB = async () => {
       port: process.env.DB_PORT || 5432,
       max: parseInt(process.env.DB_CONNECTIONLIMIT) || 10,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 10000
+      connectionTimeoutMillis: 100000
     });
 
     // Test the connection
