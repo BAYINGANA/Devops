@@ -19,7 +19,7 @@ const ConnectDB = async () => {
       idleTimeoutMillis: 30000,
       connectionTimeoutMillis: 2000,
       ssl: {
-        rejectUnauthorized: false
+        rejectUnauthorized: false // Allows connections even if the certificate is self-signed
       }
     });
 
