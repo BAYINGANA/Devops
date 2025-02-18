@@ -14,15 +14,18 @@ RUN npm install
 COPY backend/ ./
 COPY --from=frontend-build /usr/src/app/frontend/dist ./public
 
-# Stage 3: Serve the application
-FROM nginx:alpine
-COPY --from=backend-build /usr/src/app/backend /usr/src/app/backend
-COPY --from=frontend-build /usr/src/app/frontend/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-# Stage 3: Final image for running the backend server
+# Stage 3: Run the backend with Node.js
 FROM node:16-alpine
 WORKDIR /usr/src/app/backend
-COPY --from=backend-build /usr/src/app/backend .
+
+# Copy built backend from previous stage
+COPY --from=backend-build /usr/src/app/backend . 
+
+# Expose backend port
 EXPOSE 3000
+
+# Install dependencies (if not copied earlier)
+RUN npm install --production
+
+# Set environment variables (ensure you pass .env at runtime)
 CMD ["node", "index.js"]
