@@ -25,4 +25,4 @@ FROM node:16-alpine
 WORKDIR /usr/src/app/backend
 COPY --from=backend-build /usr/src/app/backend .
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["node", "index.js"]
