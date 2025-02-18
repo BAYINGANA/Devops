@@ -25,11 +25,13 @@ const ConnectDB = async () => {
 
     // Test the connection
     const client = await pool.connect();
+    console.log('Successfully connected to database');
     await client.query('SELECT NOW()');
     client.release();
 
     console.log(`Successfully connected to database ${process.env.DB_DATABASE}`);
 
+    // Creating table if not exists
     await pool.query(`CREATE TABLE IF NOT EXISTS ${process.env.DB_TABLENAME} (
           id SERIAL PRIMARY KEY,
           name VARCHAR(50) NOT NULL,
@@ -39,8 +41,15 @@ const ConnectDB = async () => {
 
     console.log(`${process.env.DB_TABLENAME} table created or already exists.`);
     return pool;
+
   } catch (error) {
-    console.error('Failed to connect to PostgreSQL database:', error);
+    console.error('Failed to connect to PostgreSQL database:', error.message);
+    if (error.code) {
+      console.error('Error Code:', error.code);
+    }
+    if (error.detail) {
+      console.error('Error Detail:', error.detail);
+    }
     throw error; // Re-throw the error to be handled by the caller
   }
 };
