@@ -1,8 +1,5 @@
-//importing the pg/promise for using async await in connection function and in queries
 const { Pool } = require('pg');
 
-
-//the async await function which connects to the database using the credentials in the .env files
 const ConnectDB = async () => {
   try {
     console.log('Attempting to connect to PostgreSQL database with config:', {
@@ -20,7 +17,10 @@ const ConnectDB = async () => {
       port: process.env.DB_PORT || 5432,
       max: parseInt(process.env.DB_CONNECTIONLIMIT) || 10,
       idleTimeoutMillis: 30000,
-      connectionTimeoutMillis: 100000
+      connectionTimeoutMillis: 2000,
+      ssl: { // Enable SSL with relaxed verification
+        rejectUnauthorized: false
+      }
     });
 
     // Test the connection
@@ -28,13 +28,8 @@ const ConnectDB = async () => {
     await client.query('SELECT NOW()');
     client.release();
 
-
-
     console.log(`Successfully connected to database ${process.env.DB_DATABASE}`);
 
-
-
-    // async await query which creates the 'users' table if it doesn't exist and creates table for id, name, email
     await pool.query(`CREATE TABLE IF NOT EXISTS ${process.env.DB_TABLENAME} (
           id SERIAL PRIMARY KEY,
           name VARCHAR(50) NOT NULL,
@@ -48,8 +43,6 @@ const ConnectDB = async () => {
     console.error('Failed to connect to PostgreSQL database:', error);
     throw error; // Re-throw the error to be handled by the caller
   }
-
 };
 
-//exporting the function
 module.exports = ConnectDB;
