@@ -12,7 +12,8 @@ WORKDIR /usr/src/app/backend
 COPY backend/package*.json ./
 RUN npm install
 COPY backend/ ./
-COPY --from=frontend-build /usr/src/app/frontend/dist ./public  # Copy frontend build to backend's public folder
+COPY --from=frontend-build /usr/src/app/frontend/dist ./public  
+
 
 # Final stage: Run the backend
 FROM node:16-alpine
